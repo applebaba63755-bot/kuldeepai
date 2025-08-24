@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kuldeep AI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>🤖 Kuldeep AI</h1>
+    <p>My AI Website with HuggingFace Brain</p>
+  </header>
+
+  <main>
+    <div class="chat-container">
+      <div id="chat-box"></div>
+      <div class="input-box">
+        <input type="text" id="user-input" placeholder="Ask me anything...">
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 Kuldeep AI | Powered by HuggingFace</p>
+  </footer>
+
+  <script>
+    async function sendMessage() {
+      let input = document.getElementById("user-input").value;
+      if (input.trim() === "") return;
+
+      let chatBox = document.getElementById("chat-box");
+      let userMessage = document.createElement("p");
+      userMessage.className = "user";
+      userMessage.innerText = "🧑‍💻 You: " + input;
+      chatBox.appendChild(userMessage);
+
+      document.getElementById("user-input").value = "";
+
+      let botMessage = document.createElement("p");
+      botMessage.className = "bot";
+      botMessage.innerText = "🤖 Thinking...";
+      chatBox.appendChild(botMessage);
+
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      // HuggingFace API call (replace with your API key later)
+      let response = await fetch("https://api-inference.huggingface.co/models/gpt2", {
+        method: "POST",
+        headers: { "Authorization": "Bearer YOUR_HF_API_KEY" },
+        body: JSON.stringify({ inputs: input })
+      });
+
+      let data = await response.json();
+      botMessage.innerText = "🤖 AI: " + (data[0]?.generated_text || "Sorry, I didn't understand.");
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+  </script>
+</body>
+</html>
